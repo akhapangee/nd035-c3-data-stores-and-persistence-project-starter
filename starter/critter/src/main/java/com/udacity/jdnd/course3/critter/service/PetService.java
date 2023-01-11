@@ -1,11 +1,13 @@
 package com.udacity.jdnd.course3.critter.service;
 
 import com.udacity.jdnd.course3.critter.entities.Pet;
+import com.udacity.jdnd.course3.critter.error.RecordNotFoundException;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PetService {
@@ -24,7 +26,12 @@ public class PetService {
     }
 
     public Pet findPetById(long petId) {
-        return petRepository.findById(petId).get();
+        Optional<Pet> pet = petRepository.findById(petId);
+        if (pet.isPresent()) {
+            return pet.get();
+        } else {
+            throw new RecordNotFoundException("Pet with ID " + petId + " not found");
+        }
     }
 
     public List<Pet> findPetsByCustomer(Long id) {
