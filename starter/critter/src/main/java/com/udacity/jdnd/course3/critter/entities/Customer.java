@@ -17,15 +17,17 @@ import java.util.Set;
 @Setter
 public class Customer {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "customer-sequence-generator"
-    )
-    @SequenceGenerator(
-            name = "customer-sequence-generator",
-            sequenceName = "customer_sequence",
-            allocationSize = 1
-    )
+//    We have to use sequence if we are using oracle
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "customer-sequence-generator"
+//    )
+//    @SequenceGenerator(
+//            name = "customer-sequence-generator",
+//            sequenceName = "customer_sequence",
+//            allocationSize = 1
+//    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String phoneNumber;
