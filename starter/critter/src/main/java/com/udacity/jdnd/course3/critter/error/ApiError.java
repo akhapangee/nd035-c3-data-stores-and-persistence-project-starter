@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class ApiError {
+public class ApiError {
     private HttpStatus status;
     private String message;
     private List<String> errors;
