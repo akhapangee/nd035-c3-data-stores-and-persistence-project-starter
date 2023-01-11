@@ -1,8 +1,18 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.entities.Customer;
+import com.udacity.jdnd.course3.critter.entities.CustomerPet;
+import com.udacity.jdnd.course3.critter.entities.Pet;
+import com.udacity.jdnd.course3.critter.error.RecordNotFoundException;
+import com.udacity.jdnd.course3.critter.service.CustomerService;
+import com.udacity.jdnd.course3.critter.service.PetService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Pets.
@@ -11,23 +21,60 @@ import java.util.List;
 @RequestMapping("/pet")
 public class PetController {
 
+    @Autowired
+    private PetService petService;
+
+    @Autowired
+    private CustomerService customerService;
+
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        throw new UnsupportedOperationException();
+
+        Pet pet = convertPetDTOToEntity(petDTO);
+        Customer customer = Optional.ofNullable(customerService.findCustomer(petDTO.getOwnerId()))
+                .orElseThrow(() -> {
+                    throw new RecordNotFoundException("Owner not found!");
+                });
+
+        pet.addCustomerPet(customer);
+
+        Pet savedPet = petService.save(pet);
+
+        return convertEntityToPetDTO(savedPet);
     }
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        Pet pet = petService.findPetById(petId);
+        return convertEntityToPetDTO(pet);
     }
 
     @GetMapping
-    public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+    public List<PetDTO> getPets() {
+        return petService.getAllPets().stream().map(pet -> convertEntityToPetDTO(pet)).collect(Collectors.toList());
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        List<Pet> pets = petService.findPetsByCustomer(ownerId);
+        return pets.stream().map(pet -> convertEntityToPetDTO(pet)).collect(Collectors.toList());
+    }
+
+    public Pet convertPetDTOToEntity(PetDTO petDTO) {
+        Pet pet = new Pet();
+        BeanUtils.copyProperties(petDTO, pet);
+        return pet;
+    }
+
+    public PetDTO convertEntityToPetDTO(Pet pet) {
+        PetDTO petDTO = new PetDTO();
+        BeanUtils.copyProperties(pet, petDTO);
+
+        CustomerPet customerPet = pet.getCustomerPets().iterator().next();
+
+        Customer customer = customerPet.getCustomer();
+        petDTO.setOwnerId(customer.getId());
+
+        return petDTO;
     }
 }
