@@ -3,7 +3,6 @@ package com.udacity.jdnd.course3.critter.pet;
 import com.udacity.jdnd.course3.critter.entities.Customer;
 import com.udacity.jdnd.course3.critter.entities.CustomerPet;
 import com.udacity.jdnd.course3.critter.entities.Pet;
-import com.udacity.jdnd.course3.critter.error.RecordNotFoundException;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import org.springframework.beans.BeanUtils;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,10 +29,8 @@ public class PetController {
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
 
         Pet pet = convertPetDTOToEntity(petDTO);
-        Customer customer = Optional.ofNullable(customerService.findCustomer(petDTO.getOwnerId()))
-                .orElseThrow(() -> {
-                    throw new RecordNotFoundException("Owner not found!");
-                });
+
+        Customer customer = customerService.findCustomer(petDTO.getOwnerId());
 
         pet.addCustomerPet(customer);
 
