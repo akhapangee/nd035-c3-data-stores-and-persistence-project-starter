@@ -5,14 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udacity.jdnd.course3.critter.entities.Employee;
 import com.udacity.jdnd.course3.critter.entities.Pet;
 import com.udacity.jdnd.course3.critter.entities.Schedule;
+import com.udacity.jdnd.course3.critter.error.RecordNotFoundException;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.ScheduleService;
+import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -32,14 +36,6 @@ public class ScheduleController {
 
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = mapper.writeValueAsString(scheduleDTO);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(json);
         Schedule savedSchedule = scheduleService.createSchedule(convertScheduleDTOToEntity(scheduleDTO));
         return convertEntityToScheduleDTO(savedSchedule);
     }
@@ -65,8 +61,6 @@ public class ScheduleController {
         scheduleDTO.setEmployeeIds(employeeList);
         scheduleDTO.setPetIds(petList);
 
-//        scheduleDTO.setActivities(savedSchedule.getActivities());
-
         return scheduleDTO;
     }
 
@@ -79,6 +73,19 @@ public class ScheduleController {
                     return employeeService.findEmployeeById(employeeId);
                 })
                 .collect(Collectors.toList());
+
+        // Check if requested activities are available based on employee records
+        Set<EmployeeSkill> allSkillsFromRequest = scheduleDTO.getActivities();
+        Set<EmployeeSkill> availableSkillsForRequestedEmployees = new HashSet<>();
+        employeeList.forEach(employee -> {
+            availableSkillsForRequestedEmployees.addAll(employee.getSkills());
+        });
+
+        allSkillsFromRequest.forEach(employeeSkill -> {
+            if (!availableSkillsForRequestedEmployees.contains(employeeSkill)) {
+                throw new RecordNotFoundException(employeeSkill + " is not available for the all requested employees!");
+            }
+        });
 
         List<Pet> petList = scheduleDTO.getPetIds().stream()
                 .map(petId -> {
