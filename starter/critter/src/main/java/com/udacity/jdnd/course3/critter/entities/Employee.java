@@ -33,13 +33,7 @@ public class Employee {
     @CollectionTable(name = "employee_available_days", joinColumns = @JoinColumn(name = "employee_id"))
     private Set<DayOfWeek> daysAvailable;
 
-    @ManyToMany(mappedBy = "employees")
-    @Column(name = "akhilesh")
-    private List<Schedule> schedules;
-
-//
-//    @OneToMany(mappedBy = "pet")
-//    private List<Schedule> pet;
-
+    @ManyToMany(mappedBy = "employees", targetEntity = Schedule.class)
+    private List<Schedule> schedule;
 
 }

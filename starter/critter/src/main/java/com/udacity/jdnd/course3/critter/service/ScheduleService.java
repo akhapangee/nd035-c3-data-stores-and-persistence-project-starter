@@ -21,4 +21,16 @@ public class ScheduleService {
     public List<Schedule> getAllSchedules() {
         return scheduleRepository.findAll();
     }
+
+    public List<Schedule> getScheduleForEmployee(long employeeId) {
+        return scheduleRepository.findScheduleByEmployeeId(employeeId);
+    }
+
+    public List<Schedule> getScheduleForPet(long petId) {
+        return scheduleRepository.findScheduleByPetId(petId);
+    }
+
+    public List<Schedule> getScheduleForCustomer(long customerId) {
+        return scheduleRepository.findScheduleByCustomerId(customerId);
+    }
 }

@@ -49,6 +49,9 @@ public class ScheduleController {
 
         BeanUtils.copyProperties(savedSchedule, scheduleDTO);
 
+        List<Employee> test = savedSchedule.getEmployees();
+        List<Pet> fdfd = savedSchedule.getPets();
+
         List<Long> employeeList = savedSchedule.getEmployees().stream()
                 .map(employee -> {
                     return employee.getId();
@@ -62,7 +65,7 @@ public class ScheduleController {
         scheduleDTO.setEmployeeIds(employeeList);
         scheduleDTO.setPetIds(petList);
 
-        scheduleDTO.setActivities(savedSchedule.getActivities());
+//        scheduleDTO.setActivities(savedSchedule.getActivities());
 
         return scheduleDTO;
     }
@@ -99,16 +102,28 @@ public class ScheduleController {
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getScheduleForPet(petId);
+        return schedules.stream()
+                .map(schedule -> {
+                    return convertEntityToScheduleDTO(schedule);
+                }).collect(Collectors.toList());
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getScheduleForEmployee(employeeId);
+        return schedules.stream()
+                .map(schedule -> {
+                    return convertEntityToScheduleDTO(schedule);
+                }).collect(Collectors.toList());
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getScheduleForCustomer(customerId);
+        return schedules.stream()
+                .map(schedule -> {
+                    return convertEntityToScheduleDTO(schedule);
+                }).collect(Collectors.toList());
     }
 }

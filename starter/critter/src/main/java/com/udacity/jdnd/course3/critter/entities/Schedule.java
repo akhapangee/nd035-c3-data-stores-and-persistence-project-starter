@@ -22,12 +22,17 @@ public class Schedule {
     private long id;
 
     @ManyToMany
+    @JoinTable(
+            name = "schedule_employees",
+            joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    )
     @Column(name = "employee_id")
-    @JoinColumn(name = "employee_id", foreignKey = @ForeignKey(name = "EMPLOYEE_ID_SCHEDULE_FK"))
     private List<Employee> employees;
     @ManyToMany
-    @Column(name = "pet_id")
-    @JoinColumn(name = "pet_id", foreignKey = @ForeignKey(name = "PET_ID_SCHEDULE_FK"))
+    @JoinTable(
+            name = "schedule_pets",
+            joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    )
     private List<Pet> pets;
 
     @ElementCollection
