@@ -32,6 +32,7 @@ public class Pet {
     private LocalDate birthDate;
     private String notes;
     @ManyToOne
+//    @NotNull(message = "ownerId can not be empty!")
     private Customer customer;
 
     @ManyToMany(mappedBy = "pets", cascade = CascadeType.ALL)

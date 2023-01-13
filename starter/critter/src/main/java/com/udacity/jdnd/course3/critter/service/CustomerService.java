@@ -18,6 +18,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private PetService petService;
+
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
@@ -33,7 +36,16 @@ public class CustomerService {
     }
 
     public Customer getOwnerByPet(long petId) {
-        return customerRepository.findCustomersByPetId(petId).get(0);
+        // Check if pet exists
+        petService.findPetById(petId);
+
+        try {
+            return customerRepository.findCustomersByPetId(petId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RecordNotFoundException("No owner found for pet " + petId);
+        }
+
     }
 
 }

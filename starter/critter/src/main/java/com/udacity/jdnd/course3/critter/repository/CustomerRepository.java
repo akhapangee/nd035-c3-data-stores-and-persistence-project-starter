@@ -17,10 +17,10 @@ public class CustomerRepository {
     private static final String FIND_CUSTOMER_BY_PET_ID =
             "select c from Customer c INNER JOIN c.pets p where p.id =:petId";
 
-    public List<Customer> findCustomersByPetId(long petId) {
+    public Customer findCustomersByPetId(long petId) {
         TypedQuery<Customer> query = entityManager.createQuery(FIND_CUSTOMER_BY_PET_ID, Customer.class);
         query.setParameter("petId", petId);
-        return query.getResultList();
+        return query.getSingleResult();
     }
 
     public List<Customer> findAll() {

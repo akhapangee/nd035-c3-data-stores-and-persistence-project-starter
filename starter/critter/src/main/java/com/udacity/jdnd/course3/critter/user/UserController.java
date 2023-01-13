@@ -51,7 +51,6 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId) {
         Customer customer = customerService.getOwnerByPet(petId);
-
         return convertEntityToCustomerDTO(customer);
     }
 
