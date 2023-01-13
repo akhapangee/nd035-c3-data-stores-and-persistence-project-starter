@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,10 +24,10 @@ public class Pet {
     private long id;
     @Enumerated(EnumType.STRING)
     private PetType type;
+    @Nationalized
     private String name;
     private LocalDate birthDate;
     private String notes;
-
     @ManyToOne
     private Customer customer;
 

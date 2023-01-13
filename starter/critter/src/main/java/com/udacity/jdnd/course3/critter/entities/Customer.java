@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -28,6 +29,7 @@ public class Customer {
 //    )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Nationalized
     private String name;
     private String phoneNumber;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
