@@ -33,6 +33,7 @@ public class UserController {
     @Autowired
     private PetService petService;
 
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
         Customer customerSaved = customerService.saveCustomer(convertCustomerDTOToEntity(customerDTO));
@@ -74,7 +75,10 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        return employeeService.findEmployeesForService(employeeDTO).stream()
+                .map(employee -> {
+                    return convertEntityToEmployeeDTO(employee);
+                }).collect(Collectors.toList());
     }
 
     public static Customer convertCustomerDTOToEntity(CustomerDTO customerDTO) {
@@ -98,13 +102,22 @@ public class UserController {
 
     public static Employee convertEmployeeDTOToEntity(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setName(employeeDTO.getName());
+        employee.setSkills(employeeDTO.getSkills());
+        if (employeeDTO.getDaysAvailable() != null) {
+            employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+        }
         return employee;
     }
 
     public static EmployeeDTO convertEntityToEmployeeDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        BeanUtils.copyProperties(employee, employeeDTO);
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setName(employee.getName());
+        employeeDTO.setSkills(employee.getSkills());
+        if (employee.getDaysAvailable() != null) {
+            employeeDTO.setDaysAvailable(employee.getDaysAvailable());
+        }
         return employeeDTO;
     }
 
