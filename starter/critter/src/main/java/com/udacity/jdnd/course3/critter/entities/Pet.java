@@ -29,12 +29,9 @@ public class Pet {
     @Nationalized
     @NotNull
     private String name;
-    @NotNull
     private LocalDate birthDate;
-    @NotNull
     private String notes;
     @ManyToOne
-    @NotNull
     private Customer customer;
 
     @ManyToMany(mappedBy = "pets", cascade = CascadeType.ALL)
