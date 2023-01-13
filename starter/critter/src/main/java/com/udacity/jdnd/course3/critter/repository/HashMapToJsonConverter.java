@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Converter
 public class HashMapToJsonConverter implements AttributeConverter<Map<String, Object>, String> {
 
     private ObjectMapper objectMapper = new ObjectMapper();
