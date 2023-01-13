@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,14 +31,6 @@ public class Customer {
     private String name;
     private String phoneNumber;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CustomerPet> customerPets = new HashSet<>();
-
-    public void addCustomerPet(Pet pet) {
-        CustomerPet customerPet = new CustomerPet();
-        customerPet.setPet(pet);
-        customerPet.setCustomer(this);
-        customerPets.add(customerPet);
-    }
-
+    private Set<Pet> pets;
 
 }

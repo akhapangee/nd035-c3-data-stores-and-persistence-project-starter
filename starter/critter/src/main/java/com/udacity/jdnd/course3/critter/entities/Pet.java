@@ -26,19 +26,13 @@ public class Pet {
     private String name;
     private LocalDate birthDate;
     private String notes;
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CustomerPet> customerPets = new HashSet<>();
+
+    @ManyToOne
+    private Customer customer;
 
     @ManyToMany(mappedBy = "pets", cascade = CascadeType.ALL)
     @Column(name = "schedule_id")
     private Set<Schedule> petSchedule = new HashSet<>();
-
-    public void addCustomerPet(Customer customer) {
-        CustomerPet customerPet = new CustomerPet();
-        customerPet.setPet(this);
-        customerPet.setCustomer(customer);
-        customerPets.add(customerPet);
-    }
 
 
 }

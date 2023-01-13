@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
-    // Here 'customerPets' is the variable name from Customer entity. Customer has one-to-many relationship with CustomerPet
-    // and Pet has same type of relationship with CustomerPet
-    @Query("select p from Customer c join c.customerPets cp join cp.pet p where c.id =:customerId")
+    @Query("select p from Customer c join c.pets p where c.id =:customerId")
     List<Pet> findPetsByCustomerId(Long customerId);
 }

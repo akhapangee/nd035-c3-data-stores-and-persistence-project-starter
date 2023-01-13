@@ -34,7 +34,7 @@ public class ScheduleRepository {
 
     private static final String FIND_SCHEDULE_BY_CUSTOMER_ID =
             "select s from Schedule s join s.pets ps where ps.id in " +
-                    "(select p.id from Pet p join p.customerPets cps join cps.customer c where c.id =:customerId)";
+                    "(select p.id from Customer c join c.pets p where c.id =:customerId)";
 
     public List<Schedule> findScheduleByCustomerId(Long customerId) {
         TypedQuery<Schedule> query = entityManager.createQuery(FIND_SCHEDULE_BY_CUSTOMER_ID, Schedule.class);

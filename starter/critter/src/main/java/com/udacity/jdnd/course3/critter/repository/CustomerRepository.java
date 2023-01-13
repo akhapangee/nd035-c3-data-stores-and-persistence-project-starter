@@ -15,7 +15,7 @@ public class CustomerRepository {
 
     private static final String FIND_ALL_CUSTOMERS = "select c from Customer c ";
     private static final String FIND_CUSTOMER_BY_PET_ID =
-            "select c from CustomerPet cp INNER JOIN cp.customer c INNER JOIN cp.pet p where p.id =:petId";
+            "select c from Customer c INNER JOIN c.pets p where p.id =:petId";
 
     public List<Customer> findCustomersByPetId(long petId) {
         TypedQuery<Customer> query = entityManager.createQuery(FIND_CUSTOMER_BY_PET_ID, Customer.class);
