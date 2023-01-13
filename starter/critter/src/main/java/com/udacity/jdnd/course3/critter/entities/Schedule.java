@@ -36,6 +36,10 @@ public class Schedule {
     private List<Pet> pets;
 
     @ElementCollection
+    @CollectionTable(
+            name = "schedule_activities",
+            joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    )
     private Set<EmployeeSkill> activities;
     private LocalDate date;
 
