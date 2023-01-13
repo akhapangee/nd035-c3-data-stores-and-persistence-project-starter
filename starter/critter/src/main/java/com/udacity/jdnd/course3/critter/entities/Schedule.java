@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -27,12 +28,14 @@ public class Schedule {
             joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     )
     @Column(name = "employee_id")
+    @NotNull
     private List<Employee> employees;
     @ManyToMany
     @JoinTable(
             name = "schedule_pets",
             joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     )
+    @NotNull
     private List<Pet> pets;
 
     @ElementCollection
@@ -40,7 +43,9 @@ public class Schedule {
             name = "schedule_activities",
             joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     )
+    @NotNull
     private Set<EmployeeSkill> activities;
+    @NotNull
     private LocalDate date;
 
 }

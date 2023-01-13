@@ -3,13 +3,13 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.entities.Employee;
 import com.udacity.jdnd.course3.critter.error.RecordNotFoundException;
 import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
-import com.udacity.jdnd.course3.critter.user.EmployeeRequestDTO;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,9 +44,14 @@ public class EmployeeService {
      * @param employeeDTO
      * @return
      */
-    public List<Employee> findEmployeesForService(EmployeeRequestDTO employeeDTO) {
-        DayOfWeek dayOfWeekFromRequest = employeeDTO.getDate().getDayOfWeek();
-        Set<EmployeeSkill> skillsFromRequest = employeeDTO.getSkills();
+    public List<Employee> findEmployeesForServiceAndDate(Set<EmployeeSkill> skillsFromRequest,
+                                                         LocalDate date) {
+        if (skillsFromRequest == null || skillsFromRequest.isEmpty()) {
+            throw new RuntimeException("Request service can not be empty!");
+        }
+        if (date == null) {
+            throw new RuntimeException("Service date can not be empty!");
+        }
 
         List<Employee> employeesFromDatabase = getAllEmployees();
 
@@ -61,7 +66,7 @@ public class EmployeeService {
             }
 
             if (skillsExists(skillsFromRequest, employeeSkillsFromDatabase)
-                    && checkDaysAvailable(dayOfWeekFromRequest, daysAvailableFromDatabase)) {
+                    && checkDaysAvailable(date.getDayOfWeek(), daysAvailableFromDatabase)) {
                 foundEmployeesByServiceAndDate.add(employee);
             }
 

@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Nationalized
+    @NotNull
     private String name;
     @Convert(converter = HashMapToJsonConverter.class)
     private Map<String, Object> skills = new HashMap<>();

@@ -22,14 +22,14 @@ import java.util.List;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    @ExceptionHandler({Exception.class})
-//    public ResponseEntity<Object> exception(Exception ex) {
-//        ApiError apiError = new ApiError(
-//                HttpStatus.BAD_REQUEST,
-//                ex.getLocalizedMessage(),
-//                Arrays.asList(ex.getMessage()));
-//        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
-//    }
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<Object> exception(Exception ex) {
+        ApiError apiError = new ApiError(
+                HttpStatus.BAD_REQUEST,
+                ex.getLocalizedMessage(),
+                Arrays.asList(ex.getMessage()));
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
 
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(
@@ -69,5 +69,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
+
 }
 

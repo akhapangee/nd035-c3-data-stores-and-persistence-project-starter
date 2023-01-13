@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,12 +24,17 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private PetType type;
     @Nationalized
+    @NotNull
     private String name;
+    @NotNull
     private LocalDate birthDate;
+    @NotNull
     private String notes;
     @ManyToOne
+    @NotNull
     private Customer customer;
 
     @ManyToMany(mappedBy = "pets", cascade = CascadeType.ALL)
