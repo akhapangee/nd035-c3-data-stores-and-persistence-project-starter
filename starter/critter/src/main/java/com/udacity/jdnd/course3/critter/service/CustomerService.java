@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,14 +23,9 @@ public class CustomerService {
     }
 
     public Customer findCustomer(Long id) {
-        try {
-            return customerRepository.findById(id);
-        } catch (Exception e) {
-            log.error("An error occurred while retrieving customer by id: " + id);
-            e.printStackTrace();
-            throw new RecordNotFoundException("Customer with ID " + id + " not found!");
-        }
-
+        return Optional.ofNullable(customerRepository.findById(id)).orElseThrow(() ->
+                new RecordNotFoundException("Customer not found!")
+        );
     }
 
     public List<Customer> getAllCustomers() {
