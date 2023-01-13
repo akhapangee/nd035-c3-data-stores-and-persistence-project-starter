@@ -1,7 +1,5 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udacity.jdnd.course3.critter.entities.Employee;
 import com.udacity.jdnd.course3.critter.entities.Pet;
 import com.udacity.jdnd.course3.critter.entities.Schedule;
@@ -32,14 +30,6 @@ public class ScheduleController {
 
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = mapper.writeValueAsString(scheduleDTO);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(json);
         Schedule savedSchedule = scheduleService.createSchedule(convertScheduleDTOToEntity(scheduleDTO));
         return convertEntityToScheduleDTO(savedSchedule);
     }
@@ -48,10 +38,6 @@ public class ScheduleController {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
 
         BeanUtils.copyProperties(savedSchedule, scheduleDTO);
-
-        List<Employee> test = savedSchedule.getEmployees();
-        List<Pet> fdfd = savedSchedule.getPets();
-
         List<Long> employeeList = savedSchedule.getEmployees().stream()
                 .map(employee -> {
                     return employee.getId();
@@ -64,9 +50,6 @@ public class ScheduleController {
                 }).collect(Collectors.toList());
         scheduleDTO.setEmployeeIds(employeeList);
         scheduleDTO.setPetIds(petList);
-
-//        scheduleDTO.setActivities(savedSchedule.getActivities());
-
         return scheduleDTO;
     }
 
