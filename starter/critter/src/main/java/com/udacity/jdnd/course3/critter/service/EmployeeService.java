@@ -59,6 +59,10 @@ public class EmployeeService {
             Set<EmployeeSkill> employeeSkillsFromDatabase = employee.getSkills();
             Set<DayOfWeek> daysAvailableFromDatabase = employee.getDaysAvailable();
 
+            if (employeeSkillsFromDatabase == null || daysAvailableFromDatabase == null) {
+                continue;
+            }
+
             if (skillsExists(skillsFromRequest, employeeSkillsFromDatabase)
                     && checkDaysAvailable(dayOfWeekFromRequest, daysAvailableFromDatabase)) {
                 foundEmployeesByServiceAndDate.add(employee);
