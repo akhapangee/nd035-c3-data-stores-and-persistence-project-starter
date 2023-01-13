@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +66,9 @@ public class EmployeeService {
             }
 
         }
-        return foundEmployeesByServiceAndDate.stream().collect(Collectors.toList());
+        return foundEmployeesByServiceAndDate.stream().sorted(
+                Comparator.comparingLong(Employee::getId)
+        ).collect(Collectors.toList());
     }
 
     private boolean checkDaysAvailable(DayOfWeek dayOfWeekFromRequest, Set<DayOfWeek> daysAvailableFromDatabase) {
