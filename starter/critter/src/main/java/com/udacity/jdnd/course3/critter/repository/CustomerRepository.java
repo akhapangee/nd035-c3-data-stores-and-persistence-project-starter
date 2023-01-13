@@ -41,8 +41,8 @@ public class CustomerRepository {
 
 
     public void delete(Long id) {
-        Customer Customer = findById(id);
-        entityManager.remove(Customer);
+        Customer customer = findById(id);
+        entityManager.remove(customer);
     }
 
 
