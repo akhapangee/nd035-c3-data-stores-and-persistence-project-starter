@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.entities;
 
+import com.udacity.jdnd.course3.critter.repository.HashMapToJsonConverter;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +9,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -22,18 +26,40 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-
-    @ElementCollection(targetClass = EmployeeSkill.class)
-    @CollectionTable(name = "employee_skill", joinColumns = @JoinColumn(name = "employee_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "skill")
-    private Set<EmployeeSkill> skills;
-    @ElementCollection(targetClass = DayOfWeek.class)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "employee_available_days", joinColumns = @JoinColumn(name = "employee_id"))
-    private Set<DayOfWeek> daysAvailable;
-
+    @Convert(converter = HashMapToJsonConverter.class)
+    private Map<String, Object> skills = new HashMap<>();
+    @Convert(converter = HashMapToJsonConverter.class)
+    private Map<String, Object> daysAvailable = new HashMap<>();
     @ManyToMany(mappedBy = "employees", targetEntity = Schedule.class)
     private List<Schedule> schedule;
 
+    public void setSkills(Set<EmployeeSkill> employeeSkills) {
+        skills.put("skills", employeeSkills);
+    }
+
+    public Set<EmployeeSkill> getSkills() {
+        Object object = skills.get("skills");
+        if (object instanceof List) {
+            List<String> employeeSkills = (List<String>) object;
+            return employeeSkills.stream().map(s ->
+                    EmployeeSkill.valueOf(s)
+            ).collect(Collectors.toSet());
+        }
+        return (Set<EmployeeSkill>) object;
+    }
+
+    public void setDaysAvailable(Set<DayOfWeek> days) {
+        daysAvailable.put("daysAvailable", days);
+    }
+
+    public Set<DayOfWeek> getDaysAvailable() {
+        Object object = daysAvailable.get("daysAvailable");
+        if (object instanceof List) {
+            List<String> dayOfWeeks = (List<String>) object;
+            return dayOfWeeks.stream().map(s ->
+                    DayOfWeek.valueOf(s)
+            ).collect(Collectors.toSet());
+        }
+        return (Set<DayOfWeek>) object;
+    }
 }
