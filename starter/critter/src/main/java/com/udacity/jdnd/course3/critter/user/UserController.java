@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers() {
         return customerService.getAllCustomers().stream()
-                .map(customer -> convertEntityToCustomerDTO(customer))
+                .map(this::convertEntityToCustomerDTO)
                 .collect(Collectors.toList());
     }
 
@@ -76,9 +76,7 @@ public class UserController {
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
         return employeeService.findEmployeesForServiceAndDate(employeeDTO.getSkills(), employeeDTO.getDate()).stream()
-                .map(employee -> {
-                    return convertEntityToEmployeeDTO(employee);
-                }).collect(Collectors.toList());
+                .map(UserController::convertEntityToEmployeeDTO).collect(Collectors.toList());
     }
 
     public static Customer convertCustomerDTOToEntity(CustomerDTO customerDTO) {

@@ -79,7 +79,7 @@ public class ScheduleController {
     public List<ScheduleDTO> getAllSchedules() {
         return scheduleService.getAllSchedules()
                 .stream()
-                .map(schedule -> convertEntityToScheduleDTO(schedule))
+                .map(this::convertEntityToScheduleDTO)
                 .collect(Collectors.toList());
     }
 
@@ -87,26 +87,20 @@ public class ScheduleController {
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
         List<Schedule> schedules = scheduleService.getScheduleForPet(petId);
         return schedules.stream()
-                .map(schedule -> {
-                    return convertEntityToScheduleDTO(schedule);
-                }).collect(Collectors.toList());
+                .map(this::convertEntityToScheduleDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
         List<Schedule> schedules = scheduleService.getScheduleForEmployee(employeeId);
         return schedules.stream()
-                .map(schedule -> {
-                    return convertEntityToScheduleDTO(schedule);
-                }).collect(Collectors.toList());
+                .map(this::convertEntityToScheduleDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
         List<Schedule> schedules = scheduleService.getScheduleForCustomer(customerId);
         return schedules.stream()
-                .map(schedule -> {
-                    return convertEntityToScheduleDTO(schedule);
-                }).collect(Collectors.toList());
+                .map(this::convertEntityToScheduleDTO).collect(Collectors.toList());
     }
 }
