@@ -1,6 +1,8 @@
 # Final Project for Data Storage & Persistence Module : Udacity Java Web Developer Nanodegree program
 The starter skeleton code is cloned from repository: https://github.com/udacity/nd035-c3-data-stores-and-persistence-project-starter
 
+**Project specification** : https://github.com/akhapangee/nd035-c3-data-stores-and-persistence-project-starter/blob/master/starter/Project%20Specification.pdf
+
 # Critter Chronologer Project Starter
 
 Critter Chronologer a Software as a Service application that provides a scheduling interface for a small business that takes care of animals. This Spring Boot project will allow users to create pets, owners, and employees, and then schedule events for employees to provide services for pets.
